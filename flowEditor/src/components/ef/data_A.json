@@ -1,0 +1,100 @@
+{
+    "name": "流程A",
+    "nodeList": [
+        {
+            "id": "NODE0",
+            "name": "开始",
+            "type": "begin",
+            "left": "250px",
+            "top": "70px",
+            "state": "idle",
+            "isCurrentNode": "NO"
+        },
+        {
+            "id": "NODE1",
+            "name": "请假申请",
+            "type": "application task",
+            "left": "250px",
+            "top": "150px",
+            "state": "idle",
+            "requester": "小明",
+            "leaveDays": "1",
+            "isCurrentNode": "NO"
+        },
+        {
+            "id": "NODE2",
+            "name": "辅导员审批",
+            "type": "approval task",
+            "left": "250px",
+            "top": "243px",
+            "state": "idle",
+            "assignee": "张三",
+            "isCurrentNode": "NO",
+            "requester": "小明",
+            "leaveDays": "1"
+        },
+        {
+            "id": "NODE3",
+            "name": "院系审批",
+            "type": "approval task",
+            "left": "128px",
+            "top": "385px",
+            "state": "idle",
+            "assignee": "计算机学院",
+            "isCurrentNode": "NO"
+        },
+        {
+            "id": "NODE4",
+            "name": "教师审批",
+            "type": "approval task",
+            "left": "389px",
+            "top": "385px",
+            "state": "idle",
+            "assignee": "李四",
+            "isCurrentNode": "NO",
+            "requester": "小明",
+            "leaveDays": "1"
+        },
+		{
+            "id": "NODE5",
+            "name": "结束",
+            "type": "end",
+            "left": "389px",
+            "top": "510px",
+            "state": "idle",
+            "isCurrentNode": "NO"
+        }
+    ],
+    "lineList": [
+        {
+            "from": "NODE0",
+            "to": "NODE1"
+        },
+        {
+            "from": "NODE2",
+            "to": "NODE3",
+            "label": "超过三天",
+            "greater": "3",
+            "less": "9999"
+        },
+        {
+            "from": "NODE2",
+            "to": "NODE4",
+            "label": "小于等于三天",
+            "greater": "0",
+            "less": "4"
+        },
+        {
+            "from": "NODE1",
+            "to": "NODE2"
+        },
+        {
+            "from": "NODE3",
+            "to": "NODE4"
+        },
+        {
+            "from": "NODE4",
+            "to": "NODE5"
+        }
+    ]
+}
