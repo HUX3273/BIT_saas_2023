@@ -86,7 +86,7 @@ import { getDataA } from './data_A'
 import { getData } from './data'
 
 
-var index = 0
+var index = 100
 
 
 export default {
@@ -521,7 +521,7 @@ export default {
 
         // 开始流程运行
         startFlow() {
-            this.nodeInfoVisible = !this.nodeInfoVisible
+            this.nodeInfoVisible = true
 
             for (var i = 0; i < this.data.nodeList.length; i++) {
                 var node = this.data.nodeList[i]

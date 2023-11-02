@@ -4,5 +4,5 @@
 ### 启动项目
 
 ```sh
-run npm dev
+npm run dev
 ```
