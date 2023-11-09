@@ -8,13 +8,19 @@
                     <el-button @click="nodeInfo" size="mini">编辑节点</el-button>
                     <el-button @click="downloadData" size="mini">下载流程JSON</el-button>
 
+
                     <div style="float: right;margin-right: 10px">
 
                     </div>
 
+
+
                 </div>
             </el-col>
         </el-row>
+
+
+
 
 
         <div style="display: flex;height: calc(100% - 47px);">
@@ -168,7 +174,8 @@ export default {
         this.$nextTick(() => {
 
             // 默认加载流程A
-            this.dataReload(getDataA())
+            this.dataReload(this.$store.state.workflow)
+            console.log(this.$store.state.workflow)
         })
     },
 
@@ -289,7 +296,7 @@ export default {
         },
 
         // 设置连线条件
-        setLineLabel(from, to, label,greater,less) {
+        setLineLabel(from, to, label, greater, less) {
             var conn = this.jsPlumb.getConnections({
                 source: from,
                 target: to
@@ -313,6 +320,7 @@ export default {
                 }
             })
 
+            this.saveLineState()
         },
 
         // 删除激活的元素
@@ -460,7 +468,9 @@ export default {
         },
 
         repaintEverything() {
+            this.saveNodeState()
             this.jsPlumb.repaint()
+            
         },
 
         // 节点数据信息显示状态切换
@@ -478,6 +488,7 @@ export default {
                 this.$refs.flowInfo.init()
             })
         },
+
 
         // 加载流程图
         dataReload(data) {
@@ -553,8 +564,21 @@ export default {
 
                 break
             }
-        }
+        },
 
+
+
+
+
+
+        //数据持久化
+        saveNodeState() {
+            this.$store.commit('workflow/changeNodeState',this.data.nodeList)
+        },
+
+        saveLineState() {
+            this.$store.commit('workflow/changeLineState',this.data.lineList)
+        },
 
 
 

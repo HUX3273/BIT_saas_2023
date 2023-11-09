@@ -124,7 +124,7 @@ export default {
         },
 
 
-        //审批
+        //申请与审批方法
         //发起申请
         request() {
             var srcNodeId = this.node.id;
@@ -237,7 +237,7 @@ export default {
                 this.data.lineList.filter((line) => {
                     if (line.to === destNodeId) {
                         srcNodeId = line.from
-                        console.log(srcNodeId)
+                        //console.log(srcNodeId)
                     }
                 })
 

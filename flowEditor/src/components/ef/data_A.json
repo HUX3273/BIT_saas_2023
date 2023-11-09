@@ -17,8 +17,8 @@
             "left": "250px",
             "top": "150px",
             "state": "idle",
-            "requester": "小明",
-            "leaveDays": "1",
+            "requester": "",
+            "leaveDays": "",
             "isCurrentNode": "NO"
         },
         {
@@ -29,9 +29,7 @@
             "top": "243px",
             "state": "idle",
             "assignee": "张三",
-            "isCurrentNode": "NO",
-            "requester": "小明",
-            "leaveDays": "1"
+            "isCurrentNode": "NO"
         },
         {
             "id": "NODE3",
@@ -51,9 +49,7 @@
             "top": "385px",
             "state": "idle",
             "assignee": "李四",
-            "isCurrentNode": "NO",
-            "requester": "小明",
-            "leaveDays": "1"
+            "isCurrentNode": "NO"
         },
 		{
             "id": "NODE5",
