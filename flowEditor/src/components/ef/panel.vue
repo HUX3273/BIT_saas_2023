@@ -8,6 +8,7 @@
                     <el-button @click="nodeInfo" size="mini">编辑节点</el-button>
                     <el-button @click="downloadData" size="mini">下载流程JSON</el-button>
 
+                    {{ this.$store.state.workflow.requester+"的"+this.$store.state.workflow.name }}
 
                     <div style="float: right;margin-right: 10px">
 
@@ -175,7 +176,7 @@ export default {
 
             // 默认加载流程A
             this.dataReload(this.$store.state.workflow)
-            console.log(this.$store.state.workflow)
+            //console.log(this.$store.state.workflow)
         })
     },
 
@@ -475,6 +476,7 @@ export default {
 
         // 节点数据信息显示状态切换
         nodeInfo() {
+
             this.nodeInfoVisible = !this.nodeInfoVisible
 
         },
@@ -579,7 +581,7 @@ export default {
         saveLineState() {
             this.$store.commit('workflow/changeLineState',this.data.lineList)
         },
-
+ 
 
 
     }

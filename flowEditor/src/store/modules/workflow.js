@@ -20,6 +20,14 @@ export default {
         changeLineState(state,lineList){
             state.lineList = lineList;
         },
+
+        changeFlowId(state,flowId){
+            state.flowId = flowId;
+        },
+
+        changeRequester(state,requester){
+            state.requester = requester;
+        },
         
 
        

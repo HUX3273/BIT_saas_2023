@@ -1,5 +1,7 @@
 {
+    "flowId":"",
     "name": "流程A",
+    "requester":"",
     "nodeList": [
         {
             "id": "NODE0",

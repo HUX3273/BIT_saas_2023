@@ -10,8 +10,8 @@
                 <input type="text" placeholder="用户id" ref="userId">
             -->
 
-            <input type="text" v-model="userId" placeholder="用户id">
-            <button @click="login">登录</button>
+            <input type="text" v-model="userId" placeholder="用户id" style="margin-left: 10px;">
+            <button @click="login" style="margin-left: 10px;">登录</button>
 
         </div>
 
@@ -30,13 +30,13 @@
             </div>
 
 
-            <h3 class="ef-node-form-header">请假：</h3>
+            <h3 class="ef-node-form-header">请假天数：</h3>
             <div class="ef-node-form-body" style="margin-left: 10px;">
                 <input type="text" v-model="leaveDays" placeholder="申请天数">
                 <button @click="request">发起申请</button>
             </div>
 
- 
+
             <h3 class="ef-node-form-header">申请结果：</h3>
             <div class="ef-node-form-body" style="margin-left: 10px;">
                 <div style="white-space: pre-wrap;">{{ result }}</div>
@@ -52,12 +52,13 @@
 
 <script>
 import lodash from 'lodash'
-
+import { getDataA } from "../components/ef/data_A"
 
 export default {
     data() {
         return {
             // 数据
+            flowId: "",
             userId: "",
             leaveDays: "",
             taskList: "",
@@ -75,7 +76,7 @@ export default {
         this.$nextTick(() => {
 
             // 默认加载流程A
-            this.dataReload(this.$store.state.workflow)
+            this.dataReload(getDataA())
             //console.log(this.$store.state.workflow)
         })
     },
@@ -104,7 +105,7 @@ export default {
 
             //显示任务列表
             this.$store.state.workflow.nodeList.filter((node) => {
-                if (node.assignee === this.userId && node.requester != null) {
+                if (node.assignee === this.userId && node.requester != null && node.state === "running") {
                     this.taskList = "申请人 [ " + node.requester + " ] 申请请假 [ " + node.leaveDays + " ] 天。"
 
                 }
@@ -117,6 +118,15 @@ export default {
                 }
             })
 
+            this.$store.state.workflow.nodeList.filter((node) => {
+                if (node.type === "end" && node.state === "running" && this.userId === this.$store.state.workflow.requester) {
+                    this.result = this.result + '\n' + "您的申请已经通过审批！"
+                }
+            })
+
+
+
+
         },
 
         logout() {
@@ -126,6 +136,7 @@ export default {
             this.userId = ""
             this.leaveDays = ""
             this.result = ""
+            this.flowId = ""
 
         },
 
@@ -143,10 +154,17 @@ export default {
 
         //申请
         request() {
-
             var srcNodeId;
             var destNodeId;
-            //console.log(this.userId)
+
+
+            //不同的用户发起申请需要先将现存的流程数据存入数据库，然后清空vuex的workflow数据
+
+
+
+
+            //写新用户的的workflow数据
+
             this.$store.state.workflow.nodeList.filter((node) => {
                 if (node.type === "application task") {
                     srcNodeId = node.id
@@ -173,8 +191,19 @@ export default {
                 }
             })
 
+
             this.saveNodeState()
             this.saveLineState()
+            this.saveRequester()
+
+            if (this.flowId === "") {
+                this.initalizeFlowId()
+                this.pushBriefToWorkflowList()
+
+            }
+
+
+
 
         },
 
@@ -224,7 +253,6 @@ export default {
             this.saveNodeState()
             this.saveLineState()
 
-
         },
 
         //驳回申请
@@ -270,6 +298,29 @@ export default {
             this.$store.commit('workflow/changeLineState', this.data.lineList)
 
         },
+
+        getUUID() {
+            return Math.random().toString(36).substr(3, 10)
+        },
+
+        initalizeFlowId() {
+            this.flowId = this.getUUID()
+            this.$store.commit('workflow/changeFlowId', this.flowId)
+        },
+
+        saveRequester() {
+            this.$store.commit('workflow/changeRequester', this.userId)
+        },
+
+        pushBriefToWorkflowList() {
+            //flowId, requester, leaveDays
+            let data={
+                flowId:this.flowId,
+                requester:this.userId,
+                leaveDays:this.leaveDays
+            }
+            this.$store.commit('workflowBrief/insert',data)
+        }
 
 
 
