@@ -10,7 +10,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/components/ef/index.css'
 import router from './router/router'
-import store from './store';
+import store from './store'
+import axios from 'axios'
 
 
 

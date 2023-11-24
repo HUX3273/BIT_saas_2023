@@ -31,7 +31,7 @@
 
 <script>
 import FlowPanel from '@/components/ef/panel'
-
+import axios from 'axios'
 
 
 export default {
@@ -39,7 +39,19 @@ export default {
     components: {
         FlowPanel
     },
-
+    created() {
+        console.log("app组件被创建了！")
+        axios.get("http://localhost:8088/workflow").then((response) => {
+            console.log(response.data[0])
+            console.log("已经取到数据！")
+        
+            this.$store.commit('workflow/changeNodeState', response.data[0].nodelist)
+            this.$store.commit('workflow/changeLineState', response.data[0].linelist)
+            this.$store.commit('workflow/changeFlowId',response.data[0].flowid)
+            this.$store.commit('workflow/changeRequester',response.data[0].requester)
+            this.$store.commit('workflow/changeFlowName',response.data[0].flowname)
+        })
+    },
     methods: {
 
 

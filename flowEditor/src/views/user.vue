@@ -69,14 +69,26 @@ export default {
         }
     },
 
+    created() {
+        console.log("user组件被创建了！")
+        // axios.get("http://localhost:8088/workflow").then((response) => {
+        //     console.log(response.data[0])
+        //     console.log("已经取到数据！")
+        //     this.$store.commit('workflow/changeNodeState', response.data[0].nodelist)
+        //     this.$store.commit('workflow/changeLineState', response.data[0].linelist)
+        //     this.$store.commit('workflow/changeFlowId',response.data[0].flowid)
+        //     this.$store.commit('workflow/changeRequester',response.data[0].requester)
+        //     this.$store.commit('workflow/changeFlowName',response.data[0].flowname)
+        // })
+    },
 
     mounted() {
-
+        console.log("user组件渲染完毕！")
         //window.console.log(this.$refs.userId.value)
         this.$nextTick(() => {
 
             // 默认加载流程A
-            this.dataReload(getDataA())
+            this.dataReload(this.$store.state.workflow)
             //console.log(this.$store.state.workflow)
         })
     },
@@ -119,7 +131,7 @@ export default {
             })
 
             this.$store.state.workflow.nodeList.filter((node) => {
-                if (node.type === "end" && node.state === "running" && this.userId === this.$store.state.workflow.requester) {
+                if (node.type === "end" && node.state === "success" && this.userId === this.$store.state.workflow.requester) {
                     this.result = this.result + '\n' + "您的申请已经通过审批！"
                 }
             })
@@ -164,6 +176,14 @@ export default {
 
 
             //写新用户的的workflow数据
+            this.$store.state.workflow.nodeList.filter((node) => {
+                if (node.type === "begin") {
+                    node.state = "success"
+                    node.isCurrentNode = "NO"
+                    node.requester = this.userId
+                    node.leaveDays = this.leaveDays
+                }
+            })
 
             this.$store.state.workflow.nodeList.filter((node) => {
                 if (node.type === "application task") {
@@ -245,6 +265,9 @@ export default {
                     node.isCurrentNode = "YES"
                     node.requester = requester_t
                     node.leaveDays = leaveDays_t
+                    if(node.type === "end"){
+                        node.state = "success"
+                    }
 
                 }
             })

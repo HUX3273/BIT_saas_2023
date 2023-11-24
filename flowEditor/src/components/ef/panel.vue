@@ -8,7 +8,7 @@
                     <el-button @click="nodeInfo" size="mini">编辑节点</el-button>
                     <el-button @click="downloadData" size="mini">下载流程JSON</el-button>
 
-                    {{ this.$store.state.workflow.requester+"的"+this.$store.state.workflow.name }}
+                    {{ this.$store.state.workflow.requester + "的" + this.$store.state.workflow.flowname }}
 
                     <div style="float: right;margin-right: 10px">
 
@@ -91,6 +91,7 @@ import FlowNodeForm from './node_form'
 import lodash from 'lodash'
 import { getDataA } from './data_A'
 import { getData } from './data'
+import axios from 'axios'
 
 
 var index = 100
@@ -169,14 +170,26 @@ export default {
             }
         }
     },
-
+    created() {
+        console.log("pannel组件被创建了！")
+        // axios.get("http://localhost:8088/workflow").then((response) => {
+        //     console.log(response.data[0])
+        //     console.log("已经取到数据！")
+        //     this.$store.commit('workflow/changeNodeState', response.data[0].nodelist)
+        //     this.$store.commit('workflow/changeLineState', response.data[0].linelist)
+        //     this.$store.commit('workflow/changeFlowId',response.data[0].flowid)
+        //     this.$store.commit('workflow/changeRequester',response.data[0].requester)
+        //     this.$store.commit('workflow/changeFlowName',response.data[0].flowname)
+        // })
+    },
     mounted() {
+        console.log("pannel组件渲染完毕！");
         this.jsPlumb = jsPlumb.getInstance()
         this.$nextTick(() => {
 
-            // 默认加载流程A
+            // 默认加载流程
             this.dataReload(this.$store.state.workflow)
-            //console.log(this.$store.state.workflow)
+            console.log(this.$store.state.workflow)
         })
     },
 
@@ -471,7 +484,7 @@ export default {
         repaintEverything() {
             this.saveNodeState()
             this.jsPlumb.repaint()
-            
+
         },
 
         // 节点数据信息显示状态切换
@@ -534,6 +547,7 @@ export default {
 
         // 开始流程运行
         startFlow() {
+
             this.nodeInfoVisible = true
 
             for (var i = 0; i < this.data.nodeList.length; i++) {
@@ -555,7 +569,9 @@ export default {
                         var node_1 = this.data.nodeList[k]
                         //console.log(this.data.nodeList[k].id)
                         if (node_1.id === destNodeId) {
+
                             console.log(this.data.nodeList[k].state)
+
                             this.data.nodeList[k].state = "running"
                             this.data.nodeList[k].isCurrentNode = "YES"
                             break
@@ -566,6 +582,10 @@ export default {
 
                 break
             }
+
+            //let nodelist = lodash.cloneDeep(this.data.nodeList)
+            //console.log(nodelist)
+
         },
 
 
@@ -575,13 +595,15 @@ export default {
 
         //数据持久化
         saveNodeState() {
-            this.$store.commit('workflow/changeNodeState',this.data.nodeList)
+            let nodeList = lodash.cloneDeep(this.data.nodeList)
+            this.$store.commit('workflow/changeNodeState', nodeList)
         },
 
         saveLineState() {
-            this.$store.commit('workflow/changeLineState',this.data.lineList)
+            let lineList = lodash.cloneDeep(this.data.lineList)
+            this.$store.commit('workflow/changeLineState', lineList)
         },
- 
+
 
 
     }

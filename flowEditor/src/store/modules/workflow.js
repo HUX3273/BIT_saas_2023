@@ -2,16 +2,16 @@ import { getDataA } from '../../components/ef/data_A'
 
 export default {
     namespaced: true,
-    state: () => getDataA(),
+    state: () => ({
+        flowId:"",
+        flowname:"",
+        requester:"",
+        nodeList: [],
+        lineList: [],
+    }),
 
     mutations: {
         // 改数据函数
-        increment(state){
-            state.counter++
-        },
-        decrement(state){
-            state.counter--
-        },
 
         changeNodeState(state,nodeList){
             state.nodeList = nodeList;
@@ -28,6 +28,11 @@ export default {
         changeRequester(state,requester){
             state.requester = requester;
         },
+
+        changeFlowName(state,flowname){
+            state.flowname = flowname;
+        },
+
         
 
        
